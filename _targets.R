@@ -9,7 +9,21 @@ library(targets)
 
 # Set target options:
 tar_option_set(
-  packages = c("tibble"), # packages that your targets need to run
+  packages = c(
+    "ggplot2",
+    "sf",
+    "uniformly",
+    "gganimate",
+    "transformr",
+    "assertthat",
+    "magrittr",
+    "dplyr",
+    "tidyr",
+    "tibble",
+    "purrr",
+    "patchwork",
+    "glue"
+  ), # packages that your targets need to run
   format = "rds" # default storage format
   # Set other options as needed.
 )

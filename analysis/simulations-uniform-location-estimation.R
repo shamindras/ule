@@ -158,8 +158,8 @@ cowplot::ggsave2(plot = comb_conv_poly_n_plt_rev,
 # Produce a more lightweight TikZ representation of plot
 dev.off()
 source(here::here("R", "utils-uniform-location-estimation.R"))
-gen_tikz_plot(width = 4, 
-              height = 7, 
+gen_tikz_plot(width = 5, 
+              height = 8, 
               plt = comb_conv_poly_n_plt_rev, 
               plt_outdir = PLOT_DIR, 
               plt_outname = "comb_conv_poly_n_plt_rev")
@@ -242,14 +242,14 @@ all_rep_n_combs_plt_rev <-
     ggplot2::labs(
         fill = "as",
         # title ="Estimation error in $L_{2}$ norm",
-        y = "Estimation error - $L_{2}$ norm",
+        y = "Estimation error",
         x = "Sample size $(n)$") +
     NULL
 all_rep_n_combs_plt_rev
 
 # Produce a png of the plot
 cowplot::ggsave2(plot = all_rep_n_combs_plt_rev,
-                 filename = "all_rep_n_combs_plt_rev",
+                 filename = "all_rep_n_combs_plt_rev.png",
                  width = 15,
                  height = 10,
                  units = "cm",
@@ -257,32 +257,10 @@ cowplot::ggsave2(plot = all_rep_n_combs_plt_rev,
                  path = PLOT_DIR)
 
 # Produce a more lightweight TikZ representation of plot
-dev.off()
+# dev.off()
 source(here::here("R", "utils-uniform-location-estimation.R"))
-gen_tikz_plot(width = 7, 
-              height = 4, 
+gen_tikz_plot(width = 5, 
+              height = 1, 
               plt = all_rep_n_combs_plt_rev, 
-              plt_outdir = PLOT_DIR, 
+              plt_outdir = PLOT_DIR,
               plt_outname = "all_rep_n_combs_plt_rev")
-
-
-# cowplot::ggsave2(plot = all_rep_n_combs_plt,
-#                  filename = "all_rep_n_combs_plt.png",
-#                  width = 15,
-#                  height = 10,
-#                  units = "cm",
-#                  dpi = 900,
-#                  path = PLOT_DIR)
-
-# Produce a more lightweight TikZ representation of plot
-tikz(file = here::here(PLOT_DIR, "all_rep_n_combs_plt.tex"),
-     width = 7,
-     height = 4)
-# op <- par(mar = rep(1, 4))
-print(all_rep_n_combs_plt)
-dev.off()
-# remove all lines that invisibly mess up the bounding box
-lines <- readLines(con=here::here(PLOT_DIR, "all_rep_n_combs_plt.tex"))
-lines <- lines[-which(grepl("\\path\\[clip\\]*", lines,perl=F))]
-lines <- lines[-which(grepl("\\path\\[use as bounding box*", lines,perl=F))]
-writeLines(lines,con=here::here(PLOT_DIR, "all_rep_n_combs_plt.tex"))

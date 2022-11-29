@@ -351,11 +351,20 @@ gen_uniform_2D_plot_rev <- function(uniform_2D_data){
 
 # Produce a more lightweight TikZ representation of plot
 gen_tikz_plot <- function(width, height, plt, plt_outdir, plt_outname){
+    # turn of any plot devices, so that we save a clean figure output
+    if(!is.null(dev.list())){
+      dev.off()
+    }
+    
     plt_outpath <- here::here(plt_outdir, glue::glue("{plt_outname}.tex"))
+    # Delete the TeX file, so that we always recreate it
+    if(file.exists(plt_outpath)){
+      file.remove(plt_outpath)
+    }
     tikz(
       file = plt_outpath,
-      width = 5,
-      height = 8
+      width = width,
+      height = width
     )
     print(plt)
     dev.off()

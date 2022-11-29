@@ -1,15 +1,11 @@
 # Setup libraries --------------------------------------------------------------
-# install.packages("remotes") # Run this if you haven't installed remotes
-# install.packages("devtools") # Run this if you haven't installed remotes
-# remotes::install_github("shamindras/sce", force = TRUE)
 library(tidyverse)
 library(patchwork)
 library(latex2exp)
 library(tikzDevice)
+
+# Source our main utils functions ----------------------------------------------
 source(here::here("R", "utils-uniform-location-estimation.R"))
-# devtools::document()
-# devtools::load_all()
-# dev.off()
 
 # Define GLOBAL variables ------------------------------------------------------
 # base::set.seed(seed = 242663)

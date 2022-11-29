@@ -15,11 +15,12 @@
 # Define the required packages ----
 PKGS <- c(
   "assertthat",
-  "dplyr",
+  "cowplot",
   "gganimate",
-  "ggplot2",
   "glue",
+  "here",
   "isotone",
+  "latex2exp",
   "magrittr",
   "milesmcbain/fnmate",
   "patchwork",
@@ -27,11 +28,11 @@ PKGS <- c(
   "sf",
   "styler",
   "targets",
-  "tibble",
-  "tidyr",
   "transformr",
   "uniformly",
-  "usethis"
+  "usethis",
+  "tidyverse",
+  "tikzDevice"
 )
 
 # {pak} install required packages

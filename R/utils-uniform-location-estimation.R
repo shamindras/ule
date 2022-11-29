@@ -319,32 +319,32 @@ gen_uniform_2D_plot_rev <- function(uniform_2D_data){
     p1 <- ggplot2::ggplot() +
         ggplot2::theme_minimal() +
         ggplot2::geom_sf(data = uniform_2D_data$K_star, color = "lightblue",
-                         fill = NA, linetype = "dashed", size = 1.5) +
+                         fill = NA, linetype = "dashed", linewidth = 1.5) +
         ggplot2::geom_sf(data = uniform_2D_data$K_star_t_s, fill = NA,
-                         linetype = "dashed", color = "black", size = 1.5) +
+                         linetype = "dashed", color = "black", linewidth = 1.5) +
         ggplot2::geom_sf(data = sf::st_centroid(x = uniform_2D_data$K_star_t_s),
                          fill = "yellow",
-                         shape = 23, size = 1) +
+                         shape = 23, linewidth = 1) +
         ggplot2::geom_sf(data = uniform_2D_data$Y_i_unif_samples,
-                         color = "purple", size = 1) +
+                         color = "purple", linewidth = 1) +
         ggplot2::geom_sf(data = uniform_2D_data$K_hat_naive_t_s, fill = NA,
                          linetype = "dotted", color = "darkgreen") +
         ggplot2::geom_sf(data = uniform_2D_data$K_hat_proj_t_s, fill = NA,
-                         linetype = "dashed", color = "red", size = 1.5) +
+                         linetype = "dashed", color = "red", linewidth = 1.5) +
         ggplot2::geom_sf(data = uniform_2D_data$out_intersection,
                          color = "green", fill = "green") +
         ggplot2::geom_sf(data =
                              sf::st_centroid(x = uniform_2D_data$out_intersection),
-                         color = "blue", fill = "blue", size = 0.5) +
-        ggplot2::labs(title = glue::glue("n = {uniform_2D_data$n_samps}")) +
-        ggplot2::theme(text = element_text(size=14))
+                         color = "blue", fill = "blue", linewidth = 0.5) +
+        ggplot2::labs(title = glue::glue("$n = {uniform_2D_data$n_samps}$")) +
+        ggplot2::theme(text = element_text(size=12))
     
     p2 <- p1 +
         ggplot2::geom_sf(data = uniform_2D_data$unif_samps_K_s_polys,
                          color = "purple",
                          fill = "purple",
                          alpha = 0.001,
-                         size = 0.1)
+                         linewidth = 0.1)
     out_plots_vars <- c("p1", "p2")
     base::return(base::mget(out_plots_vars))
 }
@@ -357,7 +357,7 @@ gen_tikz_plot <- function(width, height, plt, plt_outdir, plt_outname){
       width = 5,
       height = 8
     )
-    print(conv_nonagon_p10_plt_rev)
+    print(plt)
     dev.off()
     
     # removes unnecessary whitespace around the plot when importing into LaTeX

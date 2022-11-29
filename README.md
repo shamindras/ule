@@ -9,7 +9,7 @@ Repository to reproduce simulated figures from the paper *"Uniform Location Esti
 
 To reference this work, please cite the latest version of the paper
 
-```
+```bib
 @misc{shrotriya2022ulseconvexbodies,
 	title        = {Uniform Location Estimation on Convex Bodies},
 	author       = {Shamindra Shrotriya and Matey Neykov},
@@ -29,7 +29,7 @@ install.packages("renv")
 
 You can then clone the repository locally as usual, for example using SSH
 
-```
+```bash
 git@github.com:shamindras/ule.git #SSH approach
 ```
 ## Reproducibility

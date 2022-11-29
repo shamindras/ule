@@ -46,12 +46,13 @@ in RStudio. This will create a separate RStudio session.
 3. Select all the contents, and run the entire file. It will produce both
    `png/TeX` versions of the three figures, as follows:
 
-   ```
-   all_rep_n_combs_plt_rev.png -> Figure 2
-   comb_conv_poly_n_plt_rev.png -> Figure 6
-   conv_nonagon_p10_plt_rev.png -> Figure 7
+   ```bash
+   analysis/plots/all_rep_n_combs_plt_rev.png # -> Figure 2 in paper
+   analysis/plots/comb_conv_poly_n_plt_rev.png # -> Figure 6 in paper
+   analysis/plots/conv_nonagon_p10_plt_rev.png # -> Figure 7 in paper
    ```
 
    **Note:** In the paper we use the `.tex` versions for the figures not the
-   `.png` to reduce the resulting paper file size, however they are equivalent
-   plots, and the `.png` formats are typically easier to view.
+   `.png` to reduce the resulting paper file size. However both the `.tex` and
+   corresponding named `.png` files produce equivalent plots. The `.png` formats
+   are typically easier to view.

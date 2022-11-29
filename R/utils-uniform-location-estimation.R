@@ -1,3 +1,79 @@
+# Generate vertices of regular 2D M-gon (convex), inscribed in a unit circle
+# Adapted from: \url{https://stackoverflow.com/questions/7198144/how-to-draw-a-n-sided-regular-polygon-in-cartesian-coordinates}
+#' Generate a regular 2D M-gon inscribed in a circle of specified radius
+#'
+#' @param M (integer) : The specified number of vertices (must be positive)
+#' @param rad (numberic) : The radius of the circle in which the M-gon
+#' is insribed
+#' @param centroid (vector) : The centroid of the polygon to be constructed,
+#' currently taken to be \code{c(0, 0)} as the origin. The resulting polygon
+#' will be shifted by this centroid
+#' @param closed (logical) : Will ensure that resulting M-gon constructed has
+#' the same starting an end point i.e. will generate \code{M + 1} points with
+#' the first point and \code{M + 1}th point coinciding. This is because the
+#' \code{sf} package only accepts polygons being closed. Default value is
+#' \code{TRUE}.
+#'
+#' @return (matrix) : Returns matrix of 2D coordinates
+#' @export
+gen_verts_m_gon_cvx <- function(M, rad, centroid = c(0, 0), closed = TRUE) {
+    assertthat::assert_that(is.numeric(M))
+    assertthat::assert_that(M > 0)
+    assertthat::assert_that(is.numeric(rad))
+    assertthat::assert_that(length(centroid) == 2,
+                            msg = "Centroid must be of length 2 i.e. 2D centroid")
+    
+    vert_idcs <- 1:M
+    x_verts <- rad * cos(2 * pi * vert_idcs / M) + centroid[1]
+    y_verts <- rad * sin(2 * pi * vert_idcs / M) + centroid[2]
+    
+    if (closed) {
+        x_verts_out <- c(x_verts, x_verts[1])
+        y_verts_out <- c(y_verts, y_verts[1])
+    } else {
+        x_verts_out <- x_verts
+        y_verts_out <- y_verts
+    }
+    out_verts <- cbind(x_verts_out, y_verts_out)
+    
+    base::return(out_verts)
+}
+
+#' Shifts a specied polygon by a constant vector i.e. affine shift
+#'
+#' @param sf_poly (sf) : A 2D \code{sf} polygon
+#' @param shft_vec (numeric) : A numeric vector of the same dimension as the
+#' specified polygon
+#'
+#' @return (sf) : A 2D polygon which is the original polygon affine shifted by
+#' the given vector
+#' @export
+get_shifted_sf_polygon <- function(sf_poly, shft_vec){
+    assertthat::assert_that(is.numeric(shft_vec))
+    assertthat::assert_that(length(shft_vec) == 2) # 2D vector
+    
+    base::return(sf_poly + shft_vec)
+}
+
+#' For 2 polygons (a source polygon and target polygon), with positive lebesgue
+#' measure for the target polygon, get the proportion of the volume of the
+#' intersection of both polygons relative to the target polygon
+#'
+#' @param src_poly (sf) : An \code{sf} polygon object
+#' @param target_poly (sf) : An \code{sf} polygon object
+#'
+#' @return (numeric) : The proportion of overlap volume between the source
+#' polygon relative to the target polygon
+#' @export
+get_intersect_prop <- function(src_poly, target_poly){
+    assertthat::assert_that(sf::st_area(x = target_poly) > 0,
+                            msg = "Target Body must have positive volume")
+    intersect_vol <- sf::st_area(sf::st_intersection(x = src_poly,
+                                                     y = target_poly))
+    target_vol <- sf::st_area(x = target_poly)
+    base::return(intersect_vol/target_vol)
+}
+
 #' Generate all data for our 2D polygon location estimation example (this
 #' currently assumes our scale parameter to be equal to 1)
 #'
@@ -56,7 +132,7 @@ gen_uniform_2D_data_rev <- function(rad, M,
                                     !base::is.null(K_verts)))
     
     if(is.null(K_verts)){
-        K_verts         <- sce::gen_verts_m_gon_cvx(M = M, rad = rad,
+        K_verts         <- gen_verts_m_gon_cvx(M = M, rad = rad,
                                                     centroid = centroid,
                                                     closed = closed)
     } else{
@@ -122,7 +198,7 @@ gen_uniform_2D_data_rev <- function(rad, M,
     unif_samps_K_s_polys <-
         Y_i_unif_samples_vs %>%
         purrr::map(.x = .,
-                   .f = ~sce::get_shifted_sf_polygon(sf_poly = -K_star_s,
+                   .f = ~get_shifted_sf_polygon(sf_poly = -K_star_s,
                                                      shft_vec = .x)) %>%
         sf::st_multipolygon(x = .)
     
@@ -271,4 +347,26 @@ gen_uniform_2D_plot_rev <- function(uniform_2D_data){
                          size = 0.1)
     out_plots_vars <- c("p1", "p2")
     base::return(base::mget(out_plots_vars))
+}
+
+# Produce a more lightweight TikZ representation of plot
+gen_tikz_plot <- function(width, height, plt, plt_outdir, plt_outname){
+    plt_outpath <- here::here(plt_outdir, glue::glue("{plt_outname}.tex"))
+    tikz(
+      file = plt_outpath,
+      width = 5,
+      height = 8
+    )
+    print(conv_nonagon_p10_plt_rev)
+    dev.off()
+    
+    # removes unnecessary whitespace around the plot when importing into LaTeX
+    # this deletes all lines that invisibly mess up the bounding box
+    # source: https://stackoverflow.com/a/41186942/4687531
+    lines <- readLines(con = plt_outpath)
+    lines <- lines[-which(grepl("\\path\\[clip\\]*", lines, 
+                                perl = F))]
+    lines <- lines[-which(grepl("\\path\\[use as bounding box*", lines, 
+                                perl = F))]
+    writeLines(lines, con = plt_outpath)
 }
